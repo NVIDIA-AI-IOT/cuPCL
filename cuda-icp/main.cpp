@@ -224,7 +224,7 @@ void testPCLICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
     std::chrono::duration<double, std::ratio<1, 1000>> time_span =
        std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
 
-    std::cout << "------------checking PCL ICP---------------- "<< std::endl;
+    std::cout << "------------checking PCL ICP(CPU)---------------- "<< std::endl;
     int pCount = pcl_cloud_in->size();
 
     pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
@@ -295,7 +295,7 @@ void testPCLGICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
     std::chrono::duration<double, std::ratio<1, 1000>> time_span =
        std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
 
-    std::cout << "------------checking PCL GICP---------------- "<< std::endl;
+    std::cout << "------------checking PCL GICP(CPU)---------------- "<< std::endl;
 
     int pCount = pcl_cloud_in->size();
     pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
@@ -368,7 +368,8 @@ int main(int argc, const char **argv)
     }
     std::cout << "Loaded "
         << cloudSrc->width*cloudSrc->height
-        << " data points from src.pcd with the following fields: "
+        << " data points for P with the following fields: "
+        << pcl::getFieldsList (*cloudSrc)
         << std::endl;
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloudDst(new pcl::PointCloud<pcl::PointXYZ>);
@@ -379,7 +380,8 @@ int main(int argc, const char **argv)
     }
     std::cout << "Loaded "
         << cloudDst->width*cloudDst->height
-        << " data points from dst.pcd with the following fields: "
+        << " data points for Q with the following fields: "
+        << pcl::getFieldsList (*cloudSrc)
         << std::endl;
 
     if(argc > 1) iter.Maxiterate = atoi((argv[1]));

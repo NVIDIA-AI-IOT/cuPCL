@@ -58,10 +58,10 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 
   memset(outputData,0,sizeof(float)*4*nCount);
 
-  std::cout << "\n------------checking CUDA ---------------- "<< std::endl;
+  //std::cout << "\n------------checking CUDA ---------------- "<< std::endl;
   std::cout << "CUDA Loaded "
       << cloudSrc->width*cloudSrc->height
-      << " data points from src.pcd with the following fields: "
+      << " data points from PCD file with the following fields: "
       << pcl::getFieldsList (*cloudSrc)
       << std::endl;
 
@@ -103,7 +103,8 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   checkCudaErrors(cudaDeviceSynchronize());
   t2 = std::chrono::steady_clock::now();
   time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
-  std::cout << "CUDA PassThrough by Time: " << time_span.count() << " ms." <<"countLeft: "<< countLeft<< std::endl;
+  std::cout << "CUDA PassThrough by Time: " << time_span.count() << " ms."<< std::endl;
+  std::cout <<"Points selected: "<< countLeft<< std::endl;
 }
 
 }
@@ -111,10 +112,10 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloudDst)
 {
-  std::cout << "\n\n------------checking PCL ---------------- "<< std::endl;
-  std::cout << "PCL Loaded "
+  //std::cout << "\n\n------------checking PCL ---------------- "<< std::endl;
+  std::cout << "\n\nPCL(CPU) Loaded "
       << cloudSrc->width*cloudSrc->height
-      << " data points from src.pcd with the following fields: "
+      << " data points from PCD file with the following fields: "
       << pcl::getFieldsList (*cloudSrc)
       << std::endl;
   
@@ -126,7 +127,7 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   int nCount = cloudSrc->width * cloudSrc->height;
   float *outputData = (float *)cloudDst->points.data();
 {
-  std::cout << "\n------------checking PCL PassThrough ---------------- "<< std::endl;
+  std::cout << "\n------------checking PCL(CPU) PassThrough ---------------- "<< std::endl;
 
   memset(outputData,0,sizeof(float)*4*nCount);
 
@@ -142,10 +143,11 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   t2 = std::chrono::steady_clock::now();
 
   time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
-  std::cout << "PCL PassThrough by Time: " << time_span.count() << " ms."<< std::endl;
-
+  std::cout << "PCL(CPU) PassThrough by Time: " << time_span.count() << " ms."<< std::endl;
+  /*
   std::cout << "PointCloud before filtering: " << cloudSrc->width * cloudSrc->height 
    << " data points (" << pcl::getFieldsList (*cloudSrc) << ")." << std::endl;
+  */
   std::cout << "PointCloud after filtering: " << cloudDst->width * cloudDst->height 
      << " data points (" << pcl::getFieldsList (*cloudDst) << ")." << std::endl;
 }
@@ -154,7 +156,7 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 
 int main(int argc, const char **argv)
 {
-  std::string file = "./test-0.pcd";
+  std::string file = "./sample.pcd";
   if(argc > 1) file = (argv[1]);
 
   Getinfo();

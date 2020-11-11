@@ -169,7 +169,7 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
   seg.segment (*inliers, *coefficients);
   t2 = std::chrono::steady_clock::now();
   time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
-  std::cout << "PCL segment by Time: " << time_span.count() << " ms."<< std::endl;
+  std::cout << "PCL(CPU) segment by Time: " << time_span.count() << " ms."<< std::endl;
 
   if (inliers->indices.size () == 0)
   {
@@ -197,7 +197,7 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
 
 int main(int argc, const char **argv)
 {
-  std::string file = "./test-0.pcd";
+  std::string file = "./sample.pcd";
   if(argc > 1) file = (argv[1]);
 
   Getinfo();
