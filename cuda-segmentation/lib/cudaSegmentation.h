@@ -1,3 +1,13 @@
+/*
+ * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ *
+ * Please refer to the NVIDIA end user license agreement (EULA) associated
+ * with this source code for terms and conditions that govern your use of
+ * this software. Any use, reproduction, disclosure, or distribution of
+ * this software and related documentation outside the terms of the EULA
+ * is strictly prohibited.
+ *
+ */
 #pragma once
 #include <Eigen/Dense>
 #include "cuda_runtime.h"
@@ -51,10 +61,13 @@ public:
     ~cudaSegmentation(void);
 
     /*
-    index should >= nCount of maximum inputdata,
-    index can be used for multi-inputs, be allocated and freed just at beginning and end
-    modelCoefficients can be used for multi-inputs, be allocated and freed just at beginning and end
-  */
+    Input:
+        cloud_in: data pointer for points cloud
+        nCount: count of points in cloud_in
+    Output:
+        Index: data pointer which has the index of points in a plane from input
+        modelCoefficients: data pointer which has the group of coefficients of the plane
+    */
     int set(segParam_t param);
     void segment(float *cloud_in, int nCount,
             int *index, float *modelCoefficients);
