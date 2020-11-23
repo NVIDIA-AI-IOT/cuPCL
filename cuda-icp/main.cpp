@@ -1,12 +1,23 @@
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
  *
- * Please refer to the NVIDIA end user license agreement (EULA) associated
- * with this source code for terms and conditions that govern your use of
- * this software. Any use, reproduction, disclosure, or distribution of
- * this software and related documentation outside the terms of the EULA
- * is strictly prohibited.
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
  *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
  */
 #include <fstream>
 
@@ -155,8 +166,10 @@ void testcudaICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
     Eigen::Matrix4f matrix_icp = Eigen::Matrix4f::Identity();
     //std::cout << "matrix_icp native value "<< std::endl;
     //print4x4Matrix(matrix_icp);
-
-    std::cout << "------------checking CUDA ICP---------------- "<< std::endl;
+    void *cudaMatrix = NULL;
+    cudaMatrix = malloc(sizeof(float)*4*4);
+    memset(cudaMatrix, 0 , sizeof(float)*4*4);
+    std::cout << "------------checking CUDA ICP(GPU)---------------- "<< std::endl;
     /************************************************/
     cudaStream_t stream = NULL;
     cudaStreamCreate ( &stream );
@@ -176,12 +189,13 @@ void testcudaICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
     cudaICP icpTest(nP, nQ, stream);
 
     t1 = std::chrono::steady_clock::now();
-    icpTest.icp((float*)PUVM, nP, (float*)QUVM, nQ, iter.Maxiterate, iter.threshold, matrix_icp, stream);
+    icpTest.icp((float*)PUVM, nP, (float*)QUVM, nQ, iter.Maxiterate, iter.threshold, cudaMatrix, stream);
     t2 = std::chrono::steady_clock::now();
     time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
     std::cout << "CUDA ICP by Time: " << time_span.count() << " ms."<< std::endl;
     cudaStreamDestroy(stream);
     /************************************************/
+    memcpy(matrix_icp.data(), cudaMatrix, sizeof(float)*4*4);
     transformation_matrix = matrix_icp;
     std::cout << "CUDA ICP fitness_score: " << calculateFitneeScore( pcl_cloud_in, pcl_cloud_out, transformation_matrix) << std::endl;
     std::cout << "matrix_icp calculated Matrix by Class ICP "<< std::endl;
@@ -189,7 +203,7 @@ void testcudaICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
 
     cudaFree(PUVM);
     cudaFree(QUVM);
-
+    free(cudaMatrix);
     auto cloudSrc = pcl_cloud_in;
     auto cloudDst = pcl_cloud_out;
     pcl::PointCloud<pcl::PointXYZ> input_transformed;
