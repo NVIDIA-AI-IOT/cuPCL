@@ -20,7 +20,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Eigen/Dense>
 #include "cuda_runtime.h"
 
 class cudaICP

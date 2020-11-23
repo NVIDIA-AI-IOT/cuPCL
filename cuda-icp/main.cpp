@@ -20,15 +20,12 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <fstream>
+#include <chrono>
 
 #include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/gicp.h>
-#include <pcl/filters/random_sample.h>
-#include <pcl/visualization/cloud_viewer.h>
 
-#include <chrono>
 #include "cuda_runtime.h"
 #include "lib/cudaICP.h"
 
