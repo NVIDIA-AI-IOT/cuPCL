@@ -11,13 +11,12 @@ To get started, follow the instructions below.  If you run into any issues pleas
 
 ## Getting Started
 
-To get started with trt_pose, follow these steps.
+To get started, follow these steps.
 
 ### Step 1 - Install Dependencies
 
 1. Install Jetpack4.4.1 by SDKManager
 2. install PCL (Eigen included)
-
 ```
 $sudo apt-get update
 $sudo apt-get install libpcl-dev
@@ -28,6 +27,7 @@ Enter any subfolder and then
 ```
 $ make
 ```
+
 ### Step 3 - Run
 1. Please boost CPU and GPU firstly
 ```
