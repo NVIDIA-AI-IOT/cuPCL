@@ -1,7 +1,7 @@
 # cuda-pcl
 <a><img src="https://img.shields.io/badge/-Documentation-bright"/></a>
 
-cuda-pcl has some libraries used to procesee points cloud with CUDA and some samples for their usage.
+cuda-pcl has some libraries used to process points cloud with CUDA and some samples for their usage.
 The are several subfolders in the project and every subfolder has:
 1. lib for segmentation implemented by CUDA
 2. Sample code can show the lib usage and also be used to check perf
