@@ -24,6 +24,7 @@
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
 
 #include "cuda_runtime.h"
 #include "lib/cudaFilter.h"
@@ -72,7 +73,7 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 
   memset(outputData,0,sizeof(float)*4*nCount);
 
-  //std::cout << "\n------------checking CUDA ---------------- "<< std::endl;
+  std::cout << "\n------------checking CUDA ---------------- "<< std::endl;
   std::cout << "CUDA Loaded "
       << cloudSrc->width*cloudSrc->height
       << " data points from PCD file with the following fields: "
@@ -88,15 +89,14 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   float *output = NULL;
   cudaMallocManaged(&output, sizeof(float) * 4 * nCount, cudaMemAttachHost);
   cudaStreamAttachMemAsync (stream, output );
-  cudaMemcpyAsync(output, inputData, sizeof(float) * 4 * nCount, cudaMemcpyHostToDevice, stream);
   cudaStreamSynchronize(stream);
 
-  unsigned int countLeft = 0;
   cudaFilter filterTest(stream);
   FilterParam_t setP;
   FilterType_t type;
 
 {
+  unsigned int countLeft = 0;
   std::cout << "\n------------checking CUDA PassThrough ---------------- "<< std::endl;
 
   memset(outputData,0,sizeof(float)*4*nCount);
@@ -104,9 +104,9 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   FilterType_t type = PASSTHROUGH;
 
   setP.type = type;
-  setP.dim = 2;
-  setP.upFilterLimits = 1.0;
-  setP.downFilterLimits = 0.0;
+  setP.dim = 0;
+  setP.upFilterLimits = 0.5;
+  setP.downFilterLimits = -0.5;
   setP.limitsNegative = false;
   filterTest.set(setP);
 
@@ -117,17 +117,78 @@ void testCUDA(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   checkCudaErrors(cudaDeviceSynchronize());
   t2 = std::chrono::steady_clock::now();
   time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
-  std::cout << "CUDA PassThrough by Time: " << time_span.count() << " ms."<< std::endl;
-  std::cout <<"Points selected: "<< countLeft<< std::endl;
+  std::cout << "CUDA PassThrough by Time: " << time_span.count() << " ms." << std::endl;
+  std::cout << "CUDA PassThrough before filtering: " << nCount << std::endl;
+  std::cout << "CUDA PassThrough after filtering: " << countLeft << std::endl;
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudNew(new pcl::PointCloud<pcl::PointXYZ>);
+  cloudNew->width = countLeft;
+  cloudNew->height = 1;
+  cloudNew->points.resize (cloudNew->width * cloudNew->height);
+
+  int check = 0;
+  for (std::size_t i = 0; i < cloudNew->size(); ++i)
+  {
+      cloudNew->points[i].x = output[i*4+0];
+      cloudNew->points[i].y = output[i*4+1];
+      cloudNew->points[i].z = output[i*4+2];
+  }
+  pcl::io::savePCDFileASCII ("after-cuda-PassThrough.pcd", *cloudNew);
 }
 
+{
+  unsigned int countLeft = 0;
+  std::cout << "\n------------checking CUDA VoxelGrid---------------- "<< std::endl;
+
+  memset(outputData,0,sizeof(float)*4*nCount);
+
+  type = VOXELGRID;
+
+  setP.type = type;
+  setP.voxelX = 1;
+  setP.voxelY = 1;
+  setP.voxelZ = 1;
+
+  filterTest.set(setP);
+  int status = 0;
+  cudaDeviceSynchronize();
+  t1 = std::chrono::steady_clock::now();
+  status = filterTest.filter(output, &countLeft, input, nCount);
+  cudaDeviceSynchronize();
+  t2 = std::chrono::steady_clock::now();
+
+  if (status != 0)
+    return;
+  time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
+  std::cout << "CUDA VoxelGrid by Time: " << time_span.count() << " ms."<< std::endl;
+  std::cout << "CUDA VoxelGrid before filtering: " << nCount << std::endl;
+  std::cout << "CUDA VoxelGrid after filtering: " << countLeft << std::endl;
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudNew(new pcl::PointCloud<pcl::PointXYZ>);
+  cloudNew->width = countLeft;
+  cloudNew->height = 1;
+  cloudNew->points.resize (cloudNew->width * cloudNew->height);
+
+  int check = 0;
+  for (std::size_t i = 0; i < cloudNew->size(); ++i)
+  {
+      cloudNew->points[i].x = output[i*4+0];
+      cloudNew->points[i].y = output[i*4+1];
+      cloudNew->points[i].z = output[i*4+2];
+  }
+  pcl::io::savePCDFileASCII ("after-cuda-VoxelGrid.pcd", *cloudNew);
+}
+
+  cudaFree(input);
+  cudaFree(output);
+  cudaStreamDestroy(stream);
 }
 
 void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloudDst)
 {
-  //std::cout << "\n\n------------checking PCL ---------------- "<< std::endl;
-  std::cout << "\n\nPCL(CPU) Loaded "
+  std::cout << "\n\n------------checking PCL ---------------- "<< std::endl;
+  std::cout << "PCL(CPU) Loaded "
       << cloudSrc->width*cloudSrc->height
       << " data points from PCD file with the following fields: "
       << pcl::getFieldsList (*cloudSrc)
@@ -148,8 +209,8 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
   // Create the filtering object
   pcl::PassThrough<pcl::PointXYZ> pass;
   pass.setInputCloud (cloudSrc);
-  pass.setFilterFieldName ("z");
-  pass.setFilterLimits (0.0, 1.0);
+  pass.setFilterFieldName ("x");
+  pass.setFilterLimits (-0.5, 0.5);
   pass.setFilterLimitsNegative (false);
 
   t1 = std::chrono::steady_clock::now();
@@ -158,12 +219,35 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 
   time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
   std::cout << "PCL(CPU) PassThrough by Time: " << time_span.count() << " ms."<< std::endl;
-  /*
+
   std::cout << "PointCloud before filtering: " << cloudSrc->width * cloudSrc->height 
    << " data points (" << pcl::getFieldsList (*cloudSrc) << ")." << std::endl;
-  */
   std::cout << "PointCloud after filtering: " << cloudDst->width * cloudDst->height 
      << " data points (" << pcl::getFieldsList (*cloudDst) << ")." << std::endl;
+  pcl::io::savePCDFileASCII ("after-pcl-PassThrough.pcd", *cloudDst);
+}
+{
+  std::cout << "\n------------checking PCL VoxelGrid---------------- "<< std::endl;
+
+  memset(outputData,0,sizeof(float)*4*nCount);
+
+  t1 = std::chrono::steady_clock::now();
+
+  // Create the filtering object
+  pcl::VoxelGrid<pcl::PointXYZ> sor;
+  sor.setInputCloud (cloudSrc);
+  sor.setLeafSize (1, 1, 1);
+  sor.filter (*cloudDst);
+
+  t2 = std::chrono::steady_clock::now();
+  time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
+  std::cout << "PCL VoxelGrid by Time: " << time_span.count() << " ms."<< std::endl;
+  std::cout << "PointCloud before filtering: " << cloudSrc->width * cloudSrc->height 
+   << " data points (" << pcl::getFieldsList (*cloudSrc) << ")." << std::endl;
+  std::cout << "PointCloud after filtering: " << cloudDst->width * cloudDst->height 
+     << " data points (" << pcl::getFieldsList (*cloudDst) << ")." << std::endl;
+
+  pcl::io::savePCDFileASCII ("after-pcl-VoxelGrid.pcd", *cloudDst);
 }
 
 }
