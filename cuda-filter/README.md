@@ -30,18 +30,32 @@ Usage:<br>
 ## How to check output
 We can get output as below:
 ```
+------------checking CUDA ---------------- 
 CUDA Loaded 119978 data points from PCD file with the following fields: x y z
 
 ------------checking CUDA PassThrough ---------------- 
-CUDA PassThrough by Time: 0.580568 ms.
-Points selected: 15860
+CUDA PassThrough by Time: 0.660954 ms.
+CUDA PassThrough before filtering: 119978
+CUDA PassThrough after filtering: 5110
+
+------------checking CUDA VoxelGrid---------------- 
+CUDA VoxelGrid by Time: 3.12895 ms.
+CUDA VoxelGrid before filtering: 119978
+CUDA VoxelGrid after filtering: 3440
 
 
+------------checking PCL ---------------- 
 PCL(CPU) Loaded 119978 data points from PCD file with the following fields: x y z
 
 ------------checking PCL(CPU) PassThrough ---------------- 
-PCL(CPU) PassThrough by Time: 2.72104 ms.
-PointCloud after filtering: 15860 data points (x y z).
+PCL(CPU) PassThrough by Time: 2.97487 ms.
+PointCloud before filtering: 119978 data points (x y z).
+PointCloud after filtering: 5110 data points (x y z).
+
+------------checking PCL VoxelGrid---------------- 
+PCL VoxelGrid by Time: 7.26262 ms.
+PointCloud before filtering: 119978 data points (x y z).
+PointCloud after filtering: 3440 data points (x y z).
 
 ```
 
@@ -49,13 +63,20 @@ PointCloud after filtering: 15860 data points (x y z).
 **Perforamnce table**
 -------------------------------------------------
 ```
-                        GPU 		CPU
-count of points cloud   11w+        11w+
-dim                     Z	    	Z
-down,up FilterLimits	(0.0,1.0)   (0.0,1.0)
-limitsNegative          false       false
-Points selected         15860       15860
-cost time(ms)           0.589752    2.82811
+PASSTHROUGH             GPU 		    CPU
+count of points cloud   11w+            11w+
+dim                     X	    	    X
+down,up FilterLimits	(-0.5, 0.5)     (-0.5, 0.5)
+limitsNegative          false           false
+Points selected         5110            5110
+cost time(ms)           0.660954        2.97487
+```
+```
+VOXELGRID               GPU 		    CPU
+count of points cloud   11w+            11w+
+LeafSize            	(1,1,1)         (1,1,1)
+Points selected         3440            3440
+cost time(ms)           3.12895         7.26262
 ```
 **How To Check the Version of the Lib**
 -------------------------------------------------
