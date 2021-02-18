@@ -53,3 +53,6 @@ CUDA 10.2
 PCL 1.8
 Eigen 3
 ```
+
+## Official blog
+https://developer.nvidia.com/blog/accelerating-lidar-for-robotics-with-cuda-based-pcl/
