@@ -54,5 +54,5 @@ PCL 1.8
 Eigen 3
 ```
 
-## Official blog
+## Official Blog
 https://developer.nvidia.com/blog/accelerating-lidar-for-robotics-with-cuda-based-pcl/
