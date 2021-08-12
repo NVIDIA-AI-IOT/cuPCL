@@ -58,7 +58,7 @@ else
     $(error Auto-detection of platform failed. Please specify one of the following arguments to make: TARGET_ARCH=[aarch64|x86_64])
 endif
 
-CXXFLAGS        += -std=c++11
+CXXFLAGS        += -std=c++11 -std=c++14
 CCFLAGS         += -D_REENTRANT
 LDFLAGS         += -Wl,--allow-shlib-undefined -pthread
 #CCFLAGS         += -D_GLIBCXX_USE_CXX11_ABI=0
@@ -136,15 +136,18 @@ CUDA_LIBS   += -L$(CUDNN_PATH)/lib64 -lcudnn
 
 INCLUDE     :=
 INCLUDE     += $(CUDA_CFLAGS)
-INCLUDE     += -I/usr/local/include
-INCLUDE     += -I/usr/include/eigen3/ -I/usr/include/pcl-1.8/ -I/usr/include/vtk-6.3/
-
+INCLUDE     += -I/usr/include/
+INCLUDE     += -I/usr/include/eigen3/ -I/usr/include/vtk-6.3/
+INCLUDE     += -I/usr/include/pcl-1.8/ 
+INCLUDE     += #-I/usr/local/include/pcl-1.11/
 LIBRARIES   :=
 LIBRARIES   += -L/usr/lib
 LIBRARIES   += -L/usr/local/lib
 LIBRARIES   += $(CUDA_LIBS)
 LIBRARIES   += -lpthread
-LIBRARIES   += -L/usr/lib/aarch64-linux-gnu/ -lboost_system -lpcl_common -lpcl_io -lpcl_recognition -lpcl_features -lpcl_sample_consensus -lpcl_octree -lpcl_search -lpcl_filters -lpcl_kdtree -lpcl_segmentation -lpcl_visualization
+LIBRARIES   += -L/usr/lib/aarch64-linux-gnu/ -lboost_system
+LIBRARIES   += -L/usr/lib/aarch64-linux-gnu/ -lpcl_common -lpcl_io -lpcl_recognition -lpcl_features -lpcl_sample_consensus -lpcl_octree -lpcl_search -lpcl_filters -lpcl_kdtree -lpcl_segmentation -lpcl_visualization #\ -lpcl_gpu_octree -lpcl_gpu_octree -lpcl_gpu_utils -lpcl_gpu_containers
+#LIBRARIES   += -L/usr/local/lib/
 
 OBJ_DIR     := obj
 
@@ -163,14 +166,14 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_FILES_CPP): $(OBJ_DIR)/%.o: %.cpp
-	$(CC) $(INCLUDE) $(CCFLAGS) $(CXXFLAGS) -fPIC -o $@ -c $<
+	$(CC) $(INCLUDE) $(CCFLAGS) $(CXXFLAGS) -O2 -fPIC -o $@ -c $<
 
 $(OBJ_FILES_CU): $(OBJ_DIR)/%.o: %.cu
 	mkdir -p $(OBJ_DIR)/
-	$(NVCC) $(INCLUDE) $(CXXFLAGS) $(CCFLAGS) $(NVCCFLAGS) -lineinfo $(GENCODE_FLAGS) -Xcompiler -fPIC -c $< -o $@
+	$(NVCC) $(INCLUDE) $(CXXFLAGS) $(CCFLAGS) $(NVCCFLAGS) -O2 -lineinfo $(GENCODE_FLAGS) -Xcompiler -fPIC -c $< -o $@
 
 $(TARGET): $(OBJ_FILES_CU) $(OBJ_FILES_CPP)
-	$(CC) $(CCFLAGS) $(CXXFLAGS) -o $@ $^ $(LIBRARIES) $(LIBRARY_FILES)
+	$(CC) $(CCFLAGS) $(CXXFLAGS)  -O2 -o $@ $^ $(LIBRARIES) $(LIBRARY_FILES)
 	@echo
 
 clean:

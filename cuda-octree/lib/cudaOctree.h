@@ -34,41 +34,17 @@
     }                                                             \
 }
 
-typedef enum {
-    PASSTHROUGH = 0,
-    VOXELGRID = 1,
-} FilterType_t;
-
-typedef struct {
-    FilterType_t type;
-    //0=x,1=y,2=z
-    //type PASSTHROUGH
-    int dim;
-    float upFilterLimits;
-    float downFilterLimits;
-    bool limitsNegative;
-    //type VOXELGRID
-    float voxelX;
-    float voxelY;
-    float voxelZ;
-
-} FilterParam_t;
-
-class cudaFilter
+class cudaTree
 {
 public:
-    cudaFilter(cudaStream_t stream = 0);
-    ~cudaFilter(void);
-    /*
-    Input:
-        source: data pointer for points cloud
-        nCount: count of points in cloud_in
-    Output:
-        output: data pointer which has points filtered by CUDA
-        countLeft: count of points in output
-    */
-    int set(FilterParam_t param);
-    int filter(void *output, unsigned int *countLeft, void *source, unsigned int nCount);
+    cudaTree(float *input, int nCount, float resolution, cudaStream_t stream = 0);
+    ~cudaTree(void);
+
+    int radiusSearch(float *search, float radius, int *pointIdxRadiusSearch, float *pointRadiusSquaredDistance, unsigned int *selectedCount);
+
+    int nearestKSearch(float *search, float K, int *pointIdxNKNSearch, float *pointNKNSquaredDistance, unsigned int *selectedCount);
+
+    int approxNearestSearch(float *search, int *pointIdxANSearch, float *pointANSquaredDistance, unsigned int *selectedCount);
 
     void *m_handle = NULL;
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,6 +25,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/statistical_outlier_removal.h>
 
 #include "cuda_runtime.h"
 #include "lib/cudaFilter.h"
@@ -226,6 +227,7 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
      << " data points (" << pcl::getFieldsList (*cloudDst) << ")." << std::endl;
   pcl::io::savePCDFileASCII ("after-pcl-PassThrough.pcd", *cloudDst);
 }
+
 {
   std::cout << "\n------------checking PCL VoxelGrid---------------- "<< std::endl;
 
