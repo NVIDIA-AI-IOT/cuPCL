@@ -18,8 +18,8 @@ To get started, follow these steps.
 1. Install Jetpack4.4.1 by SDKManager
 2. install PCL (Eigen included)
 ```
-$sudo apt-get update
-$sudo apt-get install libpcl-dev
+$ sudo apt-get update
+$ sudo apt-get install libpcl-dev
 ```
 
 ### Step 2 - Build
