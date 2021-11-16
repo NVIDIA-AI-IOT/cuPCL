@@ -20,6 +20,8 @@ $ make
 
 ## Run
 Please boost CPU and GPU firstly
+Please Download the PCD file for test.
+https://raw.github.com/PointCloudLibrary/data/master/tutorials/table_scene_lms400.pcd
 
 ```
 sudo nvpmodel -m 0
@@ -27,7 +29,7 @@ sudo jetson_clocks
 ```
 Usage:<br>
 ```
-./demo [*.pcd]
+./demo [table_scene_lms400.pcd]
 ```
 ## How to check output
 We can get output as below:

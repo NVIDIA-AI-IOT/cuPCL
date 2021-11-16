@@ -65,7 +65,7 @@ typedef struct {
 
 class cudaSegmentation
 {
-public:
+  public:
     //Now Just support: SAC_RANSAC + SACMODEL_PLANE
     cudaSegmentation(int ModelType, int MethodType, cudaStream_t stream = 0);
 
@@ -82,8 +82,26 @@ public:
     int set(segParam_t param);
     void segment(float *cloud_in, int nCount,
             int *index, float *modelCoefficients);
-private:
+  private:
     void *m_handle = NULL;
 };
 
+typedef struct {
+  unsigned int minClusterSize;
+  unsigned int maxClusterSize;
+  float voxelX;
+  float voxelY;
+  float voxelZ;
+  int countThreshold;
+} extractClusterParam_t;
 
+class cudaExtractCluster
+{
+  public:
+    cudaExtractCluster(cudaStream_t stream = 0);
+    ~cudaExtractCluster(void);
+    int set(extractClusterParam_t param);
+    int extract(float *cloud_in, int nCount, float *output, unsigned int *index);
+  private:
+    void *m_handle = NULL;
+};
