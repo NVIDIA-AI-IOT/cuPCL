@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -82,26 +82,6 @@ class cudaSegmentation
     int set(segParam_t param);
     void segment(float *cloud_in, int nCount,
             int *index, float *modelCoefficients);
-  private:
-    void *m_handle = NULL;
-};
-
-typedef struct {
-  unsigned int minClusterSize;
-  unsigned int maxClusterSize;
-  float voxelX;
-  float voxelY;
-  float voxelZ;
-  int countThreshold;
-} extractClusterParam_t;
-
-class cudaExtractCluster
-{
-  public:
-    cudaExtractCluster(cudaStream_t stream = 0);
-    ~cudaExtractCluster(void);
-    int set(extractClusterParam_t param);
-    int extract(float *cloud_in, int nCount, float *output, unsigned int *index);
   private:
     void *m_handle = NULL;
 };
