@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -65,7 +65,7 @@ typedef struct {
 
 class cudaSegmentation
 {
-  public:
+public:
     //Now Just support: SAC_RANSAC + SACMODEL_PLANE
     cudaSegmentation(int ModelType, int MethodType, cudaStream_t stream = 0);
 
@@ -82,6 +82,8 @@ class cudaSegmentation
     int set(segParam_t param);
     void segment(float *cloud_in, int nCount,
             int *index, float *modelCoefficients);
-  private:
+private:
     void *m_handle = NULL;
 };
+
+
