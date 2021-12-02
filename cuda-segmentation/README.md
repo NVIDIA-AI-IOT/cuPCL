@@ -46,7 +46,7 @@ Model inliers: 7519
                         GPU         CPU
 count of points cloud   11w+        11w+
 Points selected         7519        7519
-cost time(ms)           14.5712 	67.2766
+cost time(ms)           14.5712     67.2766
 ```
 **How To Check the Version of the Lib**
 -------------------------------------------------

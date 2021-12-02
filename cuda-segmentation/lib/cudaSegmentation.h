@@ -65,7 +65,7 @@ typedef struct {
 
 class cudaSegmentation
 {
-public:
+  public:
     //Now Just support: SAC_RANSAC + SACMODEL_PLANE
     cudaSegmentation(int ModelType, int MethodType, cudaStream_t stream = 0);
 
@@ -82,7 +82,7 @@ public:
     int set(segParam_t param);
     void segment(float *cloud_in, int nCount,
             int *index, float *modelCoefficients);
-private:
+  private:
     void *m_handle = NULL;
 };
 

@@ -54,14 +54,14 @@ Points selected: 4751
 **Perforamnce table**
 -------------------------------------------------
 ```
-Approx nearest          GPU 		    CPU
+Approx nearest          GPU             CPU
 points count of tree    7000            7000
 points count of target  7000            7000
 Distance Error          0.721           2.75
 cost time(ms)           2.55            11.67
 ```
 ```
-radiusSearch            GPU 		    CPU
+radiusSearch            GPU             CPU
 points count of tree    7000            7000
 points selected         4751            4751
 cost time(ms)           0.083           1.29

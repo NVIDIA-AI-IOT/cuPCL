@@ -24,7 +24,7 @@
 
 class cudaICP
 {
-public:
+  public:
     /*
        nPCountM and nQCountM are the maximum of count for input clouds
        They are used to pre-allocate memory.

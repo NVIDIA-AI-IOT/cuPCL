@@ -53,9 +53,9 @@ PointCloud representing the Cluster: 427 data points.
 ```
 ## Perforamnce table
 ```
-												GPU         CPU
-count of points cloud   17w+        17w+
-Cluster		cost time(ms)	10.3122 		4016.85
+                                GPU         CPU
+Count of points cloud           17w+        17w+
+Cluster cost time(ms)           10.3122     4016.85
 ```
 **How To Check the Version of the Lib**
 -------------------------------------------------

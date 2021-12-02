@@ -36,7 +36,7 @@
 
 class cudaTree
 {
-public:
+  public:
     cudaTree(float *input, int nCount, float resolution, cudaStream_t stream = 0);
     ~cudaTree(void);
 

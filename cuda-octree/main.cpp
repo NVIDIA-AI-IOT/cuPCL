@@ -281,10 +281,10 @@ void testPCL(pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc,
 
 int main(int argc, const char **argv)
 {
-  std::string file = "./table_scene_lms400.pcd";
+  std::string file = "./test_P.pcd";
   if(argc > 1) file = (argv[1]);
 
-  std::string file1 = "./table_scene_lms400.pcd";
+  std::string file1 = "./test_Q.pcd";
   if(argc > 1) file1 = (argv[2]);
 
   Getinfo();

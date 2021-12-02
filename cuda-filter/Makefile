@@ -105,12 +105,12 @@ ifeq ($(TARGET_ARCH), aarch64)
     endif
 endif
 
-ifeq ($(CUDA_VERSION),10010)
+ifeq ($(CUDA_VERSION),10020)
 SMS_TURING ?= 75
 endif
 
 # Gencode arguments
-SMS ?= 30 35 50 53 60 61 $(SMS_VOLTA) $(SMS_TURING)
+SMS ?= 30 35 37 50 52 53 60 61 62 $(SMS_VOLTA) $(SMS_TURING)
 $(info SMS: $(SMS))
 
 ifeq ($(GENCODE_FLAGS),)
