@@ -6,8 +6,7 @@ cuda-pcl has some libraries used to process points cloud with CUDA and some samp
 The are several subfolders in the project and every subfolder has:
 
 1. lib for segmentation implemented by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 
 To get started, follow the instructions below.  If you run into any issues please [let us know](../../issues).
 
@@ -30,7 +29,7 @@ $sudo apt-get install libpcl-dev
 Enter any subfolder and then
 
 ```
-$ make
+make
 ```
 
 ### Step 3 - Run
@@ -38,14 +37,14 @@ $ make
 1. Please boost CPU and GPU firstly
 
 ```
-$ sudo nvpmodel -m 0
-$ sudo jetson_clocks
+sudo nvpmodel -m 0
+sudo jetson_clocks
 ```
 
 2. Usage:
 
 ```
-$ ./demo [*.pcd]
+./demo [*.pcd]
 ```
 
 ## How to check the Version of the Lib
@@ -68,49 +67,128 @@ Eigen 3
 ## Functions List
 
 ### CUDA-ICP
+
 This project provides:
-1. lib implement ICP by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
-3. two point clound: test_P.pcd and test_Q.pcd both have 7000 points
+
+1. lib for Icp implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
+3. two point clounds: test_P.pcd and test_Q.pcd that both having 7000 points
 
 ### CUDA-Filter
-The are two folders in the package
-1. lib for segmentation implemented by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
+
+The project provides:<br>
+
+1. lib for Filter implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 3. A point clound: sample.pcd which has 119978 points
 
-## CUDA-Segmentation
+NOTE: Now it supports two kinds of filters: PassThrough and VoxelGrid.
+
+### CUDA-Segmentation
+
 This package provides:<br>
-1. Segmentation lib implemented by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
+
+1. lib for Segmentation implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 3. A point clound: sample.pcd which has 119978 points
+
+NOTE: Now it just supports SAC_RANSAC + SACMODEL_PLANE.
+
+### CUDA-Octree
+
+This package provides:<br>
+
+1. lib for Octree implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
+3. A point clound: sample.pcd which has 119978 points
+
+NOTE: Now it just supports Radius Search and Approx Nearest Search
+
+### CUDA-Cluster
+
+This package provides:<br>
+
+1. lib for Cluster implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 
 NOTE:
-Now Just support: SAC_RANSAC + SACMODEL_PLANE
 
-## CUDA-Octree
-The are two folders in the package
-1. lib for segmentation implemented by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
-3. A point clound: sample.pcd which has 119978 points
+1. Cluster can be used to extract objects from points cloud after road plane was removed by Segmentation.
+2. The sample will use a PCD(sample.pcd) file which had removed road plane.
 
-## CUDA-Cluster
-This package provides:<br>
-1. Cluster lib implemented by CUDA
-2. Sample code can show the lib usage and also be used to check perf
-   and accuracy by comparing its output with PCL
+### CUDA-NDT
 
-NOTE:
-Cluster can be used to extract objects from points cloud after road plane was removed by Segmentation.
-The sample will use a PCD(sample.pcd) file which had been removed road plane.
+This package provides:
 
+1. lib for NDT implemented by CUDA
+2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
+3. two point clounds: test_P.pcd and test_Q.pcd that both having 7000 points
+
+## Performance Comparison
+
+### CUDA-ICP
+
+||GPU|CPU-GICP|CPU-ICP|
+|---|---|----|---|
+|count of points cloud|7000|7000|7000|
+|maximum of iterations|20|20|20|
+|cost time(ms)|43.3|652.8|7746.0|
+|fitness_score(the lower the better)|0.514|0.525|0.643|
+
+### CUDA-Filter
+
+#### Pass Through
+
+||GPU|CPU|
+|-|-|-|
+|count of points cloud|11w+|11w+|
+|down,up FilterLimits|(-0.5, 0.5)|(-0.5, 0.5)|
+|limitsNegative|false|false|
+|Points selected|5110|5110|
+|cost time(ms)|0.660954|2.97487|
+
+#### VoxelGrid
+
+||GPU|CPU|
+|-|-|-|
+|count of points cloud|11w+|11w+|
+|LeafSize|(1,1,1)|(1,1,1)|
+|Points selected|3440|3440|
+|cost time(ms)|3.12895|7.26262|
+
+### CUDA-Segmentation
+
+||GPU|CPU|
+|-|-|-|
+|segment by time(ms)|14.9346|69.6264|
+|model coefficients|{-0.00273056, 0.0425288, 0.999092, 1.75528}|{-0.00273045, 0.0425287, 0.999092, 1.75528}|
+|find points|9054|9054|
+
+### CUDA-Octree
+
+||GPU|CPU|
+|-|-|-|
+|count of points cloud|119978|119978|
+|down,up FilterLimits|(0.0,1.0)|(0.0,1.0)|
+|limitsNegative|false|false|
+|Points selected|16265|16265|
+|cost time(ms)|0.589752|2.82811|
+
+### CUDA-Cluster
+
+||GPU|CPU|
+|-|-|-|
+|Count of points cloud|17w+|17w+|
+|Cluster cost time(ms)|10.3122|4016.85|
+
+### CUDA-NDT
+
+||GPU|CPU|
+|-|-|-|
+|count of points cloud|7000|7000|
+|cost time(ms)|34.7789|136.858|
+|fitness_score(the lower the better)|0.538|0.540|
 
 ## Official Blog
 
-https://developer.nvidia.com/blog/accelerating-lidar-for-robotics-with-cuda-based-pcl/
-
-
+<https://developer.nvidia.com/blog/accelerating-lidar-for-robotics-with-cuda-based-pcl/>
