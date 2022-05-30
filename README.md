@@ -8,7 +8,7 @@ The are several subfolders in the project and every subfolder has:
 1. lib for segmentation implemented by CUDA
 2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 
-To get started, follow the instructions below.  If you run into any issues please [let us know](../../issues).
+To get started, follow the instructions below. Xavier and Orin are supported. If you run into any issues please [let us know](../../issues).
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ To get started, follow these steps.
 
 ### Step 1 - Install Dependencies
 
-1. Install Jetpack4.4.1 by SDKManager
+1. Install Jetpack4.4.1(other versions are supported theoretically) by SDKManager
 2. install PCL (Eigen included)
 
 ```

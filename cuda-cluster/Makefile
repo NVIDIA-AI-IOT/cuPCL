@@ -109,8 +109,12 @@ ifeq ($(CUDA_VERSION),10020)
 SMS_TURING ?= 75
 endif
 
+ifeq ($(CUDA_VERSION),11040)
+SMS_AMPERE ?= 87
+endif
+
 # Gencode arguments
-SMS ?= 30 35 37 50 52 53 60 61 62 $(SMS_VOLTA) $(SMS_TURING)
+SMS ?= 30 35 37 50 52 53 60 61 62 $(SMS_VOLTA) $(SMS_TURING) $(SMS_AMPERE)
 $(info SMS: $(SMS))
 
 ifeq ($(GENCODE_FLAGS),)
