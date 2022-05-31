@@ -58,7 +58,7 @@ else
     $(error Auto-detection of platform failed. Please specify one of the following arguments to make: TARGET_ARCH=[aarch64|x86_64])
 endif
 
-CXXFLAGS        += -std=c++11
+CXXFLAGS        += -std=c++14
 CCFLAGS         += -D_REENTRANT
 LDFLAGS         += -Wl,--allow-shlib-undefined -pthread
 #CCFLAGS         += -D_GLIBCXX_USE_CXX11_ABI=0
@@ -141,7 +141,7 @@ CUDA_LIBS   += -L$(CUDNN_PATH)/lib64 -lcudnn
 INCLUDE     :=
 INCLUDE     += $(CUDA_CFLAGS)
 INCLUDE     += -I/usr/local/include
-INCLUDE     += -I/usr/include/eigen3/ -I/usr/include/pcl-1.8/ -I/usr/include/vtk-6.3/
+INCLUDE     += -I/usr/include/eigen3/ -I/usr/include/pcl-1.10/ -I/usr/include/vtk-6.3/
 
 LIBRARIES   :=
 LIBRARIES   += -L/usr/lib
