@@ -192,3 +192,4 @@ This package provides:
 ## Official Blog
 
 <https://developer.nvidia.com/blog/accelerating-lidar-for-robotics-with-cuda-based-pcl/>
+<https://developer.nvidia.com/blog/detecting-objects-in-point-clouds-with-cuda-pointpillars/>
