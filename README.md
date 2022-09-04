@@ -1,8 +1,8 @@
-# cuda-pcl
+# cuPCL
 
 <a><img src="https://img.shields.io/badge/-Documentation-bright"/></a>
 
-cuda-pcl has some libraries used to process points cloud with CUDA and some samples for their usage.
+cuPCL has some libraries used to process points cloud with CUDA and some samples for their usage.
 The are several subfolders in the project and every subfolder has:
 
 1. lib for segmentation implemented by CUDA
@@ -66,7 +66,7 @@ Eigen 3
 
 ## Functions List
 
-### CUDA-ICP
+### cuICP
 
 This project provides:
 
@@ -74,7 +74,7 @@ This project provides:
 2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 3. two point clounds: test_P.pcd and test_Q.pcd that both having 7000 points
 
-### CUDA-Filter
+### cuFilter
 
 The project provides:<br>
 
@@ -84,7 +84,7 @@ The project provides:<br>
 
 NOTE: Now it supports two kinds of filters: PassThrough and VoxelGrid.
 
-### CUDA-Segmentation
+### cuSegmentation
 
 This package provides:<br>
 
@@ -94,7 +94,7 @@ This package provides:<br>
 
 NOTE: Now it just supports SAC_RANSAC + SACMODEL_PLANE.
 
-### CUDA-Octree
+### cuOctree
 
 This package provides:<br>
 
@@ -104,7 +104,7 @@ This package provides:<br>
 
 NOTE: Now it just supports Radius Search and Approx Nearest Search
 
-### CUDA-Cluster
+### cuCluster
 
 This package provides:<br>
 
@@ -116,7 +116,7 @@ NOTE:
 1. Cluster can be used to extract objects from points cloud after road plane was removed by Segmentation.
 2. The sample will use a PCD(sample.pcd) file which had removed road plane.
 
-### CUDA-NDT
+### cuNDT
 
 This package provides:
 
@@ -126,7 +126,7 @@ This package provides:
 
 ## Performance Comparison
 
-### CUDA-ICP
+### cuICP
 
 ||GPU|CPU-GICP|CPU-ICP|
 |---|---|----|---|
@@ -135,7 +135,7 @@ This package provides:
 |cost time(ms)|43.3|652.8|7746.0|
 |fitness_score(the lower the better)|0.514|0.525|0.643|
 
-### CUDA-Filter
+### cuFilter
 
 #### Pass Through
 
@@ -156,7 +156,7 @@ This package provides:
 |Points selected|3440|3440|
 |cost time(ms)|3.12895|7.26262|
 
-### CUDA-Segmentation
+### cuSegmentation
 
 ||GPU|CPU|
 |-|-|-|
@@ -164,7 +164,7 @@ This package provides:
 |model coefficients|{-0.00273056, 0.0425288, 0.999092, 1.75528}|{-0.00273045, 0.0425287, 0.999092, 1.75528}|
 |find points|9054|9054|
 
-### CUDA-Octree
+### cuOctree
 
 ||GPU|CPU|
 |-|-|-|
@@ -174,14 +174,14 @@ This package provides:
 |Points selected|16265|16265|
 |cost time(ms)|0.589752|2.82811|
 
-### CUDA-Cluster
+### cuCluster
 
 ||GPU|CPU|
 |-|-|-|
 |Count of points cloud|17w+|17w+|
 |Cluster cost time(ms)|10.3122|4016.85|
 
-### CUDA-NDT
+### cuNDT
 
 ||GPU|CPU|
 |-|-|-|
