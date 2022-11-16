@@ -24,7 +24,7 @@
 
 class cudaICP
 {
-  public:
+public:
     /*
        nPCountM and nQCountM are the maximum of count for input clouds
        They are used to pre-allocate memory.
@@ -47,8 +47,8 @@ class cudaICP
         transformation_matrix
     */
     void icp(float *cloud_source, int nPCount,
-            float *cloud_target, int nQCount,
-            int Maxiterate, double threshold,
+            float *cloud_target, int nQCount, float relative_mse,
+            int Maxiterate, double threshold, float truncted_error,
             void *transformation_matrix,
             cudaStream_t stream = 0);
     void *m_handle = NULL;

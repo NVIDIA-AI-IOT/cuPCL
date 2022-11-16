@@ -136,8 +136,7 @@ CUDA_CFLAGS := -I/usr/local/$(CUDAVERSION)/include
 CUDA_LIBS   := -L/usr/local/$(CUDAVERSION)/$(LIBDIR) -lcudart_static -lrt -ldl -lpthread -lcudart
 
 CUDA_CFLAGS += -I$(CUDNN_PATH)/include
-CUDA_LIBS   += -L$(CUDNN_PATH)/lib64 -lcudnn
-
+CUDA_LIBS   += -L$(CUDNN_PATH)/lib64
 INCLUDE     :=
 INCLUDE     += $(CUDA_CFLAGS)
 INCLUDE     += -I/usr/local/include
