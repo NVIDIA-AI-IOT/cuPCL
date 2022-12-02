@@ -33,8 +33,10 @@ struct Iter_para //Interation paraments
 {
     constexpr static int PCountN = 35947;// control count of N
     int Maxiterate;//Maximum iteration count
-    double threshold;//threshold for distance Error
+    double threshold;//threshold for distance Error. Also known as transformation epsilon
     double acceptrate;//accept rate
+    float distance_threshold;  // max distance between source point and its closest target point
+    float relative_mse;      // icp.setEuclideanFitnessEpsilon. Difference between current iteration’s mse and last iteration’s mse
 };
 
 void Getinfo(void)
@@ -186,7 +188,8 @@ void testcudaICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
     cudaICP icpTest(nP, nQ, stream);
 
     t1 = std::chrono::steady_clock::now();
-    icpTest.icp((float*)PUVM, nP, (float*)QUVM, nQ, iter.Maxiterate, iter.threshold, cudaMatrix, stream);
+    icpTest.icp((float*)PUVM, nP, (float*)QUVM, nQ, iter.relative_mse, iter.Maxiterate, iter.threshold, iter.distance_threshold,
+		    cudaMatrix, stream);
     t2 = std::chrono::steady_clock::now();
     time_span = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>(t2 - t1);
     std::cout << "CUDA ICP by Time: " << time_span.count() << " ms."<< std::endl;
@@ -379,7 +382,7 @@ void testPCLGICP(pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cloud_in,
 int main(int argc, const char **argv)
 {
     Getinfo();
-    Iter_para iter{ 20, 1e-12, 1.0 };
+    Iter_para iter{ 50, 1e-9, 1.0, 0.5, 0.0001 };
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloudSrc(new pcl::PointCloud<pcl::PointXYZ>);
     if (pcl::io::loadPCDFile<pcl::PointXYZ>("test_P.pcd", *cloudSrc )== -1)

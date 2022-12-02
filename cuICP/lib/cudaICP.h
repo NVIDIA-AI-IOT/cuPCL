@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -21,10 +21,12 @@
  */
 #pragma once
 #include "cuda_runtime.h"
+#include "Eigen/Core"
+#include "Eigen/Dense"
 
 class cudaICP
 {
-  public:
+public:
     /*
        nPCountM and nQCountM are the maximum of count for input clouds
        They are used to pre-allocate memory.
@@ -47,8 +49,8 @@ class cudaICP
         transformation_matrix
     */
     void icp(float *cloud_source, int nPCount,
-            float *cloud_target, int nQCount,
-            int Maxiterate, double threshold,
+            float *cloud_target, int nQCount, float relative_mse,
+            int Maxiterate, double threshold, float truncted_error,
             void *transformation_matrix,
             cudaStream_t stream = 0);
     void *m_handle = NULL;
