@@ -3,12 +3,12 @@
 <a><img src="https://img.shields.io/badge/-Documentation-bright"/></a>
 
 cuPCL has some libraries used to process points cloud with CUDA and some samples for their usage.
-The are several subfolders in the project and every subfolder has:
+There are several subfolders in the project and every subfolder has:
 
-1. lib for segmentation implemented by CUDA
+1. lib implemented by CUDA
 2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 
-To get started, follow the instructions below. Xavier and Orin are supported. If you run into any issues please [let us know](../../issues).
+To get started, follow the instructions below. Xavier, Orin, and x86 are supported(For jp4.x, jp5.x, and x86_64 lib, please check to the respective branch). If you run into any issues please [let us know](../../issues).
 
 ## Getting Started
 
