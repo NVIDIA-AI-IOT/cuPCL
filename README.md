@@ -8,7 +8,11 @@ There are several subfolders in the project and every subfolder has:
 1. lib implemented by CUDA
 2. Sample code showing the lib usage and checking the perf and accuracy by comparing its output with PCL's
 
-To get started, follow the instructions below. Xavier, Orin, and x86 are supported(For jp4.x, jp5.x, and x86_64 lib, please check to the respective branch). If you run into any issues please [let us know](../../issues).
+To get started, follow the instructions below.
+
+**Xavier, Orin, and Linux x86 are supported(For Jetpack 4.x, Jetpack 5.x, and Linux x86_64 library, please check the respective branch).**
+
+If you run into any issues please [let us know](../../issues).
 
 ## Getting Started
 
