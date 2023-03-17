@@ -9,8 +9,7 @@ Now Just support: SAC_RANSAC + SACMODEL_PLANE
 
 ## Prerequisites
 
-### 1. Install Jetpack4.4.1 by SDKManager
-### 2. install PCL (Eigen included)
+### Install PCL (Eigen included)
 ```
 $sudo apt-get update
 $sudo apt-get install libpcl-dev

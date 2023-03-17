@@ -10,8 +10,7 @@ The sample will use a PCD(sample.pcd) file which had been removed road plane.
 
 ## Prerequisites
 
-### 1. Install Jetpack4.4.1 by SDKManager
-### 2. install PCL (Eigen included)
+### Install PCL (Eigen included)
 ```
 $sudo apt-get update
 $sudo apt-get install libpcl-dev

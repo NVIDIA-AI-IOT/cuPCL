@@ -20,8 +20,7 @@ To get started, follow these steps.
 
 ### Step 1 - Install Dependencies
 
-1. Install Jetpack4.4.1(other versions are supported theoretically) by SDKManager
-2. install PCL (Eigen included)
+Install PCL (Eigen included)
 
 ```
 $sudo apt-get update
