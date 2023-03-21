@@ -23,8 +23,8 @@ To get started, follow these steps.
 Install PCL (Eigen included)
 
 ```
-$sudo apt-get update
-$sudo apt-get install libpcl-dev
+$ sudo apt-get update
+$ sudo apt-get install libpcl-dev
 ```
 
 ### Step 2 - Build
