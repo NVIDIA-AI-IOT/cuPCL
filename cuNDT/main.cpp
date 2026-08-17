@@ -21,6 +21,7 @@
  */
 #include <fstream>
 #include <chrono>
+#include <limits>
 
 #include <pcl/io/pcd_io.h>
 
